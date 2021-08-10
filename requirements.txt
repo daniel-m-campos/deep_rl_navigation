@@ -1,0 +1,11 @@
+tensorflow==1.7.1
+Pillow>=4.2.1
+numpy>=1.11.0
+docopt
+protobuf==3.5.2
+grpcio==1.11.0
+torch==0.4.0
+ipykernel
+gym[classic_control]
+gym[box2d]
+git+https://github.com/udacity/deep-reinforcement-learning.git#egg=unityagents&subdirectory=python
