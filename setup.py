@@ -16,6 +16,6 @@ setup(
     version="0.0.1",
     package_dir={"": "src"},
     packages=find_packages("src"),
-    test_requires=TEST_REQUIREMENTS,
     install_requires=REQUIREMENTS + TEST_REQUIREMENTS,
+    extras_require={"TEST": TEST_REQUIREMENTS},
 )
