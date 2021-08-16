@@ -33,8 +33,8 @@ class NavigationEnv(Environment):
         self._info = self._unity_env.reset(train_mode=True)[self._brain_name]
         self._action_space = gym.spaces.Discrete(brain.vector_action_space_size)
         self._observation_space = gym.spaces.Box(
-            low=-float("inf"),
-            high=float("inf"),
+            low=0,
+            high=1,
             shape=(len(self._info.vector_observations[0]),),
             dtype=np.float32,
         )
