@@ -13,9 +13,7 @@ def play(agent: Agent, environment: Environment, max_steps=math.inf) -> float:
         environment (Environment): the environment to play in
         max_steps (int): maximum number of steps
     """
-    score = 0
-    steps = 0
-    done = False
+    score, steps, done = 0, 0, False
     state = environment.reset()
     while steps < max_steps and not done:
         steps += 1
