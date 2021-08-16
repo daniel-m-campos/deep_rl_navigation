@@ -6,6 +6,5 @@ protobuf==3.5.2
 grpcio==1.11.0
 torch==0.4.0
 ipykernel
-gym[classic_control]
-gym[box2d]
+gym[box2d]==0.10.0
 unityagents @ git+https://github.com/udacity/deep-reinforcement-learning.git#egg=unityagents&subdirectory=python
