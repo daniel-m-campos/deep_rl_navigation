@@ -12,7 +12,7 @@ class Environment(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def reset(self) -> None:
+    def reset(self) -> np.array:
         pass
 
     @abc.abstractmethod
@@ -35,7 +35,7 @@ class NavigationEnv(Environment):
         self._observation_space = gym.spaces.Box(
             low=-float("inf"),
             high=float("inf"),
-            shape=(self._info.vector_observations[0],),
+            shape=(len(self._info.vector_observations[0]),),
             dtype=np.float32,
         )
 
@@ -50,6 +50,7 @@ class NavigationEnv(Environment):
 
     def reset(self):
         self._info = self._unity_env.reset(train_mode=True)[self._brain_name]
+        return self._info.vector_observations[0]
 
     @property
     def action_space(self):
