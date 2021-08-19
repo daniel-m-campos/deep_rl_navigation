@@ -51,7 +51,7 @@ class DQNAgent(Agent):
         self,
         state_size,
         action_size,
-        seed,
+        seed=0,
         buffer_size=int(1e5),
         batch_size=64,
         gamma=0.99,
