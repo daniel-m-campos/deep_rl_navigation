@@ -16,7 +16,7 @@ def train(
     eps_start=1.0,
     eps_end=0.01,
     eps_decay=0.995,
-    filename="checkpoint.pth",
+    filename=None,
 ) -> List[float]:
     """Episodic Reinforcement Learning
 
@@ -29,6 +29,7 @@ def train(
         eps_start (float): starting value of epsilon, for epsilon-greedy action selection
         eps_end (float): minimum value of epsilon
         eps_decay (float): multiplicative factor (per episode) for decreasing epsilon
+        filename (str): Optional path to save agent network
     """
     scores = []
     scores_window = deque(maxlen=100)
@@ -48,23 +49,17 @@ def train(
         scores.append(score)
         eps = max(eps_end, eps_decay * eps)
         print(
-            "\rEpisode {}\tAverage Score: {:.2f}".format(
-                i_episode, np.mean(scores_window)
-            ),
+            f"\rEpisode {i_episode}\tAverage Score: {np.mean(scores_window):.2f}",
             end="",
         )
         if i_episode % 100 == 0:
-            print(
-                "\rEpisode {}\tAverage Score: {:.2f}".format(
-                    i_episode, np.mean(scores_window)
-                )
-            )
+            print(f"\rEpisode {i_episode}\tAverage Score: {np.mean(scores_window):.2f}")
         if np.mean(scores_window) >= 200.0:
             print(
-                "\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}".format(
-                    i_episode - 100, np.mean(scores_window)
-                )
+                f"\nEnvironment solved in {i_episode - 100:d} episodes!"
+                f"\tAverage Score: {np.mean(scores_window):.2f}"
             )
-            agent_io.save(agent, filename)
+            if filename:
+                agent_io.save(agent, filename)
             break
     return scores
