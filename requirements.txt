@@ -8,3 +8,4 @@ torch==0.4.0
 ipykernel
 gym[box2d]==0.10.0
 unityagents @ git+https://github.com/udacity/deep-reinforcement-learning.git#egg=unityagents&subdirectory=python
+fire
