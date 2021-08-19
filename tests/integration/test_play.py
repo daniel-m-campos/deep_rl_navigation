@@ -1,14 +1,12 @@
 import pytest
 import torch
 
-from deep_rl_navigation import agent, environment, UNITY_BINARY, play
+from deep_rl_navigation import agent, environment, play
 
 
 @pytest.fixture
 def navigation_env():
-    return environment.NavigationEnv(
-        environment.UnityEnvironment(file_name=UNITY_BINARY)
-    )
+    return environment.NavigationEnv.from_unity_binary()
 
 
 def test_play(navigation_env: environment.NavigationEnv):
