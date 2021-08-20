@@ -3,7 +3,6 @@ from typing import List
 
 import numpy as np
 
-from deep_rl_navigation import agent_io
 from deep_rl_navigation.agent import Agent
 from deep_rl_navigation.environment import Environment
 
@@ -54,12 +53,4 @@ def train(
         )
         if i_episode % 100 == 0:
             print(f"\rEpisode {i_episode}\tAverage Score: {np.mean(scores_window):.2f}")
-        if np.mean(scores_window) >= 200.0:
-            print(
-                f"\nEnvironment solved in {i_episode - 100:d} episodes!"
-                f"\tAverage Score: {np.mean(scores_window):.2f}"
-            )
-            if filename:
-                agent_io.save(agent, filename)
-            break
     return scores
