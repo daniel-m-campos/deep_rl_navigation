@@ -9,6 +9,7 @@ from deep_rl_navigation import (
     play as nav_play,
     train as nav_train,
     agent_io,
+    plot,
 )
 
 
@@ -21,7 +22,7 @@ def play(
     device = torch.device(device_type)
     print(f"Training the Agent with {device.type} device")
     agent.DEVICE = device
-    agent.DEVICE = torch.device("cpu")
+
     navigation_env = environment.NavigationEnv.from_unity_binary(train_mode=False)
     dqn_agent = agent.DQNAgent(
         state_size=navigation_env.observation_space.shape[0],
@@ -33,12 +34,13 @@ def play(
 
 
 def train(
-    n_episodes=2000,
+    n_episodes=1000,
     max_t=1000,
     eps_start=1.0,
     eps_end=0.01,
     eps_decay=0.995,
     save_path="data/checkpoint.pth",
+    image_path="docs/performance.png",
     device_type="cpu",
     **agent_params,
 ):
@@ -62,8 +64,9 @@ def train(
         eps_decay=eps_decay,
         filename=save_path,
     )
-    # TODO: plot scores
-    print(scores)
+    if save_path:
+        agent_io.save(dqn_agent, save_path)
+    plot.performance(scores, save_file=image_path)
 
 
 fire.Fire()
