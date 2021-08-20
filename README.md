@@ -1,5 +1,7 @@
 # Deep RL Navigation [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+![](img/play.gif)
+
 ## Installation
 
 To easily install the package, clone the repository and use a `virtualenv` to pip install the package in developer mode.
