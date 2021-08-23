@@ -9,7 +9,7 @@ import torch.optim as optim
 
 from deep_rl_navigation.model import QNetwork
 
-DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def soft_update(local_model, target_model, tau):
