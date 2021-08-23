@@ -40,7 +40,7 @@ def train(
     eps_end=0.01,
     eps_decay=0.995,
     save_path="data/checkpoint.pth",
-    image_path="docs/performance.png",
+    image_path="img/performance.png",
     device_type="cpu",
     **agent_params,
 ):
