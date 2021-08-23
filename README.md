@@ -16,7 +16,7 @@ pip install -e .
 
 ### Requirements
 
-See `requirements.txt` and `text-requiremnets.txt`.
+See `requirements.txt` and `text-requiremnets.txt`. These are installed during the `pip install` step.
 
 ### Binary dependencies
 
@@ -57,10 +57,10 @@ To train with custom parameters, run for example:
 
 ```bash
 python -m deep_rl_navigation train \
---n_episodes=100 \
---save_path=None \
---image_path=None \
---learning_rate=5e-3
+  --n_episodes=100 \
+  --save_path=None \
+  --image_path=None \
+  --learning_rate=5e-3
 ```
 
 ### Play
