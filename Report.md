@@ -10,7 +10,7 @@ details.
 
 #### Training
 
-| Name | Value | 
+| Name           | Value    | 
 | ---            | ---      |
 | episodes       | 1000     |
 | max time steps | 1000     |
@@ -20,7 +20,7 @@ details.
 
 #### Agent
 
-| Name | Value | 
+| Name           | Value    | 
 | ---            | ---      |
 | buffer size    | 10,000   | 
 | batch size     | 64       | 
@@ -39,6 +39,8 @@ The Neural Network architecture used was:
 4. 4 out linear action value vector
 
 ## Plot of Rewards
+
+The agent achieved an average score of 13 at episode 494.
 
 ![](img/performance.png)
 
