@@ -14,9 +14,8 @@ function err() {
 function install_deps() {
   echo Installing dependencies
   sudo add-apt-repository -y ppa:deadsnakes/ppa &&
-    sudo apt update -y &&
+    sudo apt-get update -y --allow-unauthenticated &&
     sudo apt install -y python3.6 python3.6-venv python3.6-dev swig
-  return 0
 }
 
 function install_package() {
@@ -27,7 +26,6 @@ function install_package() {
     source venv/bin/activate &&
     pip install --upgrade pip &&
     pip install -e .
-  return 0
 }
 
 function set_binary_link() {
@@ -42,7 +40,6 @@ function set_binary_link() {
   fi
   echo Symlinking to $BINARY_LINK
   ln -s "$BINARY_LOCATION" $BINARY_LINK
-  return 0
 }
 
 function main() {
