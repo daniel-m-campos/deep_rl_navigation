@@ -15,7 +15,6 @@ def train(
     eps_start=1.0,
     eps_end=0.01,
     eps_decay=0.995,
-    filename=None,
 ) -> List[float]:
     """Episodic Reinforcement Learning
 
