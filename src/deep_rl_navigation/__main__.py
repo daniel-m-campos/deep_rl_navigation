@@ -62,7 +62,6 @@ def train(
         eps_start=eps_start,
         eps_end=eps_end,
         eps_decay=eps_decay,
-        filename=save_path,
     )
     if save_path:
         agent_io.save(dqn_agent, save_path)
