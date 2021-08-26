@@ -1,36 +1,17 @@
 # Deep RL [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-[comment]: <> (TODO: Generalize to other environments)
+## Environments
 
-![](img/play.gif)
-
-## Game Environment
-
-A reward of +1 is provided for collecting a yellow banana, and a reward of -1 is provided for collecting a blue banana.
-Thus, the goal of the agent is to collect as many yellow bananas as possible while avoiding blue bananas.
-
-The state space has 37 dimensions and contains the agent's velocity, along with ray-based perception of objects around
-the agent's forward direction. Given this information, the agent has to learn how to best select actions.
-
-Four discrete actions are available, corresponding to:
-
-| Index | Action |
-| ---   | ---    |
-| 0     | Move forward |
-| 1     | Move backward |
-| 2     | Turn left     |
-| 3     | Turn right    |
-
-The task is episodic, and in order to solve the environment, your agent must get an average score of +13 over 100
-consecutive episodes.
+1. [Navigation](docs/Navigation.md)
+2. [Continuous Control](docs/ContinuousControl.md)
 
 ## Installation
 
 To easily install the package, clone the repository and use a `virtualenv` to pip install the package in developer mode.
 
 ```bash
-git clone https://github.com/daniel-m-campos/deep_rl_navigation.git
-cd deep_rl_navigation
+git clone https://github.com/daniel-m-campos/deep_rl.git
+cd deep_rl
 python -m venv venv # make sure Python 3.6
 . venv/bin/activate
 pip install -e .
@@ -42,15 +23,16 @@ See `requirements.txt` and `text-requiremnets.txt`. These are installed during t
 
 ### Binary dependencies
 
-The package depends on the Banana Navigation Unity Environment. Download and save to the appropriate binary from:
+The package depends on the Udacity's Unity Environments. See [Environments](#Environments) for the binary download links.
 
-* Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Linux.zip)
-* Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana.app.zip)
-* Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Windows_x86.zip)
-* Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Windows_x86_64.zip)
+Once downloaded, update the `UNITY_BINARY` dict in the `__init__.py` file. The default binary locations are:
 
-And then update the `UNITY_BINARY` path in the `__init__.py` file. The default binary location
-is `/usr/local/sbin/Banana.x86_64`.
+```python
+UNITY_BINARY = {
+    "navigation": "/usr/local/sbin/Banana.x86_64",
+    "continuous_control": "/usr/local/sbin/Reacher.x86_64",
+}
+```
 
 ## Usage
 
@@ -58,28 +40,28 @@ The package provides a [Fire](https://github.com/google/python-fire) CLI for tra
 basic commands:
 
 ```bash
-cd deep_rl_navigation
+cd deep_rl
 . venv/bin/activate
-python -m deep_rl_navigation --help
+python -m deep_rl --help
 ```
 
-To see what parameters are available, refer to the `train` and `play` functions in `deep_rl_navigation/__main__.py` as
-well as the `__init__` method of `DQNAgent` in `deep_rl_navigation/agent.py`
+To see what parameters are available, refer to the `train` and `play` functions in `deep_rl/__main__.py` as well as
+the `__init__` method of `Agent` implementations in `deep_rl/agent.py`
 
 ### Train
 
-To train an agent in the Banana Unity environment with default parameters, run:
+To train an agent in the Navigation/Banana Unity environment with default parameters, run:
 
 ```bash
-cd deep_rl_navigation
+cd deep_rl
 . venv/bin/activate
-python -m deep_rl_navigation train
+python -m deep_rl navigation train
 ```
 
 To train with custom parameters, run for example:
 
 ```bash
-python -m deep_rl_navigation train \
+python -m deep_rl navigation train \
   --n_episodes=100 \
   --save_path=None \
   --image_path=None \
@@ -91,13 +73,13 @@ python -m deep_rl_navigation train \
 To play an agent in the Banana Unity environment with default parameters, run:
 
 ```bash
-cd deep_rl_navigation
+cd deep_rl
 . venv/bin/activate
-python -m deep_rl_navigation play
+python -m deep_rl navigation play
 ```
 
 To play with alternative network, run
 
 ```bash
-python -m deep_rl_navigation play --load_path="path_to_your/network.pth"
+python -m deep_rl navigation play --load_path="path_to_your/network.pth"
 ```
