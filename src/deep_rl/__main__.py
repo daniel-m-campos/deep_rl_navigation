@@ -3,7 +3,7 @@ import math
 import fire
 import torch
 
-from deep_rl_navigation import (
+from deep_rl import (
     agent,
     environment,
     play as nav_play,
@@ -48,7 +48,9 @@ def train(
     print(f"Training the Agent with {device.type} device")
     agent.DEVICE = device
 
+    # TODO: Parameterize Environment
     navigation_env = environment.NavigationEnv.from_unity_binary()
+    # TODO: Parameterize Agent
     dqn_agent = agent.DQNAgent(
         state_size=navigation_env.observation_space.shape[0],
         action_size=navigation_env.action_space.n,

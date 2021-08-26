@@ -6,7 +6,7 @@ import tempfile
 
 import pytest
 
-from deep_rl_navigation import plot
+from deep_rl import plot
 
 
 @pytest.fixture

@@ -7,7 +7,7 @@ import torch
 import torch.nn.functional as torch_func
 import torch.optim as optim
 
-from deep_rl_navigation.model import QNetwork
+from deep_rl.model import QNetwork
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -212,3 +212,6 @@ class ReplayBuffer:
     def __len__(self):
         """Return the current size of internal memory."""
         return len(self.memory)
+
+
+# TODO: Add DDPGAgent

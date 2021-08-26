@@ -5,7 +5,7 @@ import gym
 import numpy as np
 from unityagents import UnityEnvironment
 
-from deep_rl_navigation import UNITY_BINARY
+from deep_rl import UNITY_BINARY
 
 
 class Environment(abc.ABC):
@@ -66,3 +66,6 @@ class NavigationEnv(Environment):
     @classmethod
     def from_unity_binary(cls, **kwargs):
         return cls(UnityEnvironment(file_name=UNITY_BINARY), **kwargs)
+
+
+# TODO: Add Reacher environment

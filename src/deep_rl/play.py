@@ -1,7 +1,7 @@
 import math
 
-from deep_rl_navigation.agent import Agent
-from deep_rl_navigation.environment import Environment
+from deep_rl.agent import Agent
+from deep_rl.environment import Environment
 
 
 def play(agent: Agent, environment: Environment, max_steps=math.inf) -> float:

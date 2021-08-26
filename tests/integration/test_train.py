@@ -2,7 +2,7 @@ import gym
 import pytest
 import torch
 
-from deep_rl_navigation import agent, train
+from deep_rl import agent, train
 
 
 def test_train():

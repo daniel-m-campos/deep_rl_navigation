@@ -3,8 +3,8 @@ from typing import List
 
 import numpy as np
 
-from deep_rl_navigation.agent import Agent
-from deep_rl_navigation.environment import Environment
+from deep_rl.agent import Agent
+from deep_rl.environment import Environment
 
 
 def train(

@@ -9,11 +9,12 @@ REQUIREMENTS = get_requirements("requirements.txt")
 TEST_REQUIREMENTS = get_requirements("test-requirements.txt")
 
 setup(
-    name="deep_rl_navigation",
-    description="Solution for Udacity Deep Reinforcement Learning Navigation Project",
-    url="https://github.com/daniel-m-campos/deep_rl_navigation",
+    name="deep_rl",
+    description="Deep Reinforcement Learning examples from Udacity's Deep RL Nano "
+    "Degree",
+    url="https://github.com/daniel-m-campos/deep_rl",
     author="Daniel Campos",
-    version="0.0.1",
+    version="1.0.0",
     package_dir={"": "src"},
     packages=find_packages("src"),
     install_requires=REQUIREMENTS + TEST_REQUIREMENTS,

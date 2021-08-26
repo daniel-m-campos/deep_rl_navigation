@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from deep_rl_navigation import agent, environment, play
+from deep_rl import agent, environment, play
 
 
 @pytest.fixture

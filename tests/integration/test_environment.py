@@ -2,7 +2,7 @@ import gym
 import numpy as np
 import pytest
 
-from deep_rl_navigation import environment, UNITY_BINARY
+from deep_rl import environment, UNITY_BINARY
 
 
 @pytest.fixture(scope="class")

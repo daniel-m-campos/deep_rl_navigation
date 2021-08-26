@@ -2,6 +2,7 @@
 #
 # Package setup for Ubuntu
 
+REPO=https://github.com/daniel-m-campos/deep_rl.git
 BINARY_NAME=Banana.x86_64
 BINARY_LINK=/usr/local/sbin/Banana.x86_64
 BINARY_DOWNLOAD=https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Linux.zip
@@ -20,8 +21,8 @@ function install_deps() {
 
 function install_package() {
   echo Installing Python package
-  git clone https://github.com/daniel-m-campos/deep_rl_navigation.git &&
-    cd deep_rl_navigation || exit 1 &&
+  git clone $REPO &&
+    cd deep_rl || exit 1 &&
     /usr/bin/python3.6 -m venv venv &&
     source venv/bin/activate &&
     pip install --upgrade pip &&

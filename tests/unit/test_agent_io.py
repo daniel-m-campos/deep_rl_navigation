@@ -1,5 +1,5 @@
-from deep_rl_navigation import agent_io
-from deep_rl_navigation.agent import DQNAgent
+from deep_rl import agent_io
+from deep_rl.agent import DQNAgent
 
 
 def test_load():
