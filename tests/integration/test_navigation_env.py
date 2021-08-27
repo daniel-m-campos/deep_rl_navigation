@@ -2,14 +2,12 @@ import gym
 import numpy as np
 import pytest
 
-from deep_rl import environment, UNITY_BINARY
+from deep_rl import environment
 
 
 @pytest.fixture(scope="class")
 def navigation_env():
-    return environment.NavigationEnv(
-        environment.UnityEnvironment(file_name=UNITY_BINARY)
-    )
+    return environment.Navigation.from_binary_path()
 
 
 @pytest.fixture(scope="class")

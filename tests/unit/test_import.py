@@ -1,12 +1,12 @@
-def test_version():
-    from deep_rl import __version__
-    from pkg_resources import parse_version
+from pkg_resources import parse_version
+from unityagents import UnityEnvironment
 
-    assert parse_version(__version__) >= parse_version("0.0.0")
+from deep_rl import __version__
+
+
+def test_version():
+    assert parse_version(__version__) >= parse_version("1.0.0")
 
 
 def test_unity_environment():
-    from deep_rl import UNITY_BINARY
-    from unityagents import UnityEnvironment
-
-    env = UnityEnvironment(file_name=UNITY_BINARY)
+    env = UnityEnvironment(file_name="/usr/local/sbin/Banana.x86_64")

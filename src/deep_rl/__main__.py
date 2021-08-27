@@ -6,61 +6,89 @@ import torch
 from deep_rl import (
     agent,
     environment,
-    play as nav_play,
-    train as nav_train,
+    play as rl_play,
+    train as rl_train,
     agent_io,
     plot,
 )
 
 
 def play(
-    max_steps=math.inf,
-    load_path="data/checkpoint.pth",
-    device_type="cpu",
+    env_name: str,
+    max_steps: int = math.inf,
+    load_path: str = "data/checkpoint.pth",
+    device_type: str = "cpu",
     **agent_params,
 ):
+    """Play Agent in an Environment
+
+    Params
+    ======
+        env_name: The environment to train in: "Navigation" or "ContinuousControl"
+        max_steps: Maximum number of steps per episode
+        load_path: Path to load agent network
+        device_type: Torch device to use
+        agent_params: Agent specific parameter overrides
+    """
     device = torch.device(device_type)
     print(f"Training the Agent with {device.type} device")
     agent.DEVICE = device
 
-    navigation_env = environment.NavigationEnv.from_unity_binary(train_mode=False)
+    env = environment.create(env_name, train_mode=False)
     dqn_agent = agent.DQNAgent(
-        state_size=navigation_env.observation_space.shape[0],
-        action_size=navigation_env.action_space.n,
+        state_size=env.observation_space.shape[0],
+        action_size=env.action_space.n,
         **agent_params,
     )
     agent_io.load(dqn_agent, load_path)
-    nav_play.play(dqn_agent, navigation_env, max_steps)
+    rl_play.play(dqn_agent, env, max_steps)
 
 
 def train(
-    n_episodes=1000,
-    max_t=1000,
-    eps_start=1.0,
-    eps_end=0.01,
-    eps_decay=0.995,
-    save_path="data/checkpoint.pth",
-    image_path="img/performance.png",
-    device_type="cpu",
+    env_name: str,
+    n_episodes: int = 1000,
+    max_steps: int = 1000,
+    eps_start: float = 1.0,
+    eps_end: float = 0.01,
+    eps_decay: float = 0.995,
+    save_path: str = "data/checkpoint.pth",
+    image_path: str = "img/performance.png",
+    device_type: str = "cpu",
+    binary_path: str = None,
     **agent_params,
 ):
+    """Train Agent in an Environment
+
+    Params
+    ======
+        env_name: The environment to train in: "Navigation" or "ContinuousControl"
+        n_episodes: Maximum number of training episodes
+        max_steps: Maximum number of steps per episode
+        eps_start: Starting value of epsilon, for epsilon-greedy action selection
+        eps_end: Minimum value of epsilon
+        eps_decay: Multiplicative factor (per episode) for decreasing epsilon
+        save_path: Path to save agent network
+        image_path: Path to save performance plot
+        device_type: Torch device to use
+        binary_path: Path Unity environment binary/executable
+        agent_params: Agent specific parameter overrides
+    """
     device = torch.device(device_type)
     print(f"Training the Agent with {device.type} device")
     agent.DEVICE = device
 
-    # TODO: Parameterize Environment
-    navigation_env = environment.NavigationEnv.from_unity_binary()
+    env = environment.create(env_name, binary_path)
     # TODO: Parameterize Agent
     dqn_agent = agent.DQNAgent(
-        state_size=navigation_env.observation_space.shape[0],
-        action_size=navigation_env.action_space.n,
+        state_size=env.observation_space.shape[0],
+        action_size=env.action_space.n,
         **agent_params,
     )
-    scores = nav_train.train(
+    scores = rl_train.train(
         dqn_agent,
-        navigation_env,
+        env,
         n_episodes=n_episodes,
-        max_t=max_t,
+        max_steps=max_steps,
         eps_start=eps_start,
         eps_end=eps_end,
         eps_decay=eps_decay,

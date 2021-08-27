@@ -23,16 +23,12 @@ See `requirements.txt` and `text-requiremnets.txt`. These are installed during t
 
 ### Binary dependencies
 
-The package depends on the Udacity's Unity Environments. See [Environments](#Environments) for the binary download links.
+The package depends on the Udacity's Unity Environments. See [Environments](#Environments) for the binary download
+links.
 
-Once downloaded, update the `UNITY_BINARY` dict in the `__init__.py` file. The default binary locations are:
-
-```python
-UNITY_BINARY = {
-    "navigation": "/usr/local/sbin/Banana.x86_64",
-    "continuous_control": "/usr/local/sbin/Reacher.x86_64",
-}
-```
+The default binary paths are set in the `Environment` implementations and are of the
+form `/usr/local/sbin/<ENVIRONMENT>.x86_64`. See the `Navigation` class in `environment.py` for an example. You can
+either sim link the downloaded binaries to the default directories or pass the `binary_path` when running the package.
 
 ## Usage
 
@@ -42,11 +38,11 @@ basic commands:
 ```bash
 cd deep_rl
 . venv/bin/activate
-python -m deep_rl --help
+python -m deep_rl <command> --help
 ```
 
-To see what parameters are available, refer to the `train` and `play` functions in `deep_rl/__main__.py` as well as
-the `__init__` method of `Agent` implementations in `deep_rl/agent.py`
+Where `<command>` is either `train` or `play`. See `deep_rl/__main__.py` as well as the `__init__` method of `Agent`
+implementations in `deep_rl/agent.py`
 
 ### Train
 
@@ -55,13 +51,13 @@ To train an agent in the Navigation/Banana Unity environment with default parame
 ```bash
 cd deep_rl
 . venv/bin/activate
-python -m deep_rl navigation train
+python -m deep_rl train navigation
 ```
 
 To train with custom parameters, run for example:
 
 ```bash
-python -m deep_rl navigation train \
+python -m deep_rl train navigation \
   --n_episodes=100 \
   --save_path=None \
   --image_path=None \
@@ -75,11 +71,11 @@ To play an agent in the Banana Unity environment with default parameters, run:
 ```bash
 cd deep_rl
 . venv/bin/activate
-python -m deep_rl navigation play
+python -m deep_rl play navigation
 ```
 
 To play with alternative network, run
 
 ```bash
-python -m deep_rl navigation play --load_path="path_to_your/network.pth"
+python -m deep_rl play navigation --load_path="path_to_your/network.pth"
 ```

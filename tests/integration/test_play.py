@@ -6,10 +6,10 @@ from deep_rl import agent, environment, play
 
 @pytest.fixture
 def navigation_env():
-    return environment.NavigationEnv.from_unity_binary()
+    return environment.Navigation.from_binary_path()
 
 
-def test_play(navigation_env: environment.NavigationEnv):
+def test_play(navigation_env: environment.Navigation):
     agent.DEVICE = torch.device("cpu")
     dqn_agent = agent.DQNAgent(
         state_size=navigation_env.observation_space.shape[0],

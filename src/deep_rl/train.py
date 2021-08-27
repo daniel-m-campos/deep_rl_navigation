@@ -11,7 +11,7 @@ def train(
     agent: Agent,
     environment: Environment,
     n_episodes=2000,
-    max_t=1000,
+    max_steps=1000,
     eps_start=1.0,
     eps_end=0.01,
     eps_decay=0.995,
@@ -23,7 +23,7 @@ def train(
         agent (Agent): the agent to train
         environment (Environment): the environment to train in
         n_episodes (int): maximum number of training episodes
-        max_t (int): maximum number of steps per episode
+        max_steps (int): maximum number of steps per episode
         eps_start (float): starting value of epsilon, for epsilon-greedy action selection
         eps_end (float): minimum value of epsilon
         eps_decay (float): multiplicative factor (per episode) for decreasing epsilon
@@ -35,7 +35,7 @@ def train(
     for i_episode in range(1, n_episodes + 1):
         state = environment.reset()
         score = 0
-        for t in range(max_t):
+        for t in range(max_steps):
             action = agent.act(state, eps)
             next_state, reward, done, _ = environment.step(action)
             agent.step(state, action, reward, next_state, done)
