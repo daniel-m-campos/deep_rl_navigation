@@ -6,7 +6,7 @@ import torch
 from deep_rl.agent import Agent, DQNAgent, DDPGAgent
 
 
-def save(agent: Agent, filename: Union[Path, Tuple[Path, Path]]):
+def save(agent: Agent, filename: Union[str, Path, Tuple[Path, Path]]):
     if isinstance(agent, DQNAgent):
         torch.save(agent.qnetwork_local.state_dict(), filename)
     elif isinstance(agent, DDPGAgent):
@@ -17,7 +17,7 @@ def save(agent: Agent, filename: Union[Path, Tuple[Path, Path]]):
         raise NotImplementedError
 
 
-def load(agent: Agent, filename: Union[Path, Tuple[Path, Path]]):
+def load(agent: Agent, filename: Union[str, Path, Tuple[Path, Path]]):
     if isinstance(agent, DQNAgent):
         state_dict = torch.load(filename)
         agent.qnetwork_local.load_state_dict(state_dict)
