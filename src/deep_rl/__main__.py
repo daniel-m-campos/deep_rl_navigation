@@ -16,7 +16,7 @@ from deep_rl import (
 def play(
     env_name: str,
     max_steps: int = math.inf,
-    load_path: str = "data/checkpoint.pth",
+    load_path: str = None,
     device_type: str = "cpu",
     **agent_params,
 ):
@@ -26,10 +26,11 @@ def play(
     ======
         env_name: The environment to train in: "Navigation" or "ContinuousControl"
         max_steps: Maximum number of steps per episode
-        load_path: Path to load agent network
+        load_path: Path to load agent network. If None, default is used
         device_type: Torch device to use
         agent_params: Agent specific parameter overrides
     """
+
     device = torch.device(device_type)
     print(f"Training the Agent with {device.type} device")
     agent.DEVICE = device
@@ -40,6 +41,8 @@ def play(
         action_size=env.action_space.n,
         **agent_params,
     )
+    if load_path is None:
+        load_path = f"data/{env.__class__.__name__}.pth"
     agent_io.load(dqn_agent, load_path)
     rl_play.play(dqn_agent, env, max_steps)
 
@@ -51,7 +54,7 @@ def train(
     eps_start: float = 1.0,
     eps_end: float = 0.01,
     eps_decay: float = 0.995,
-    save_path: str = "data/checkpoint.pth",
+    save_path: str = "",
     image_path: str = "img/performance.png",
     device_type: str = "cpu",
     binary_path: str = None,
@@ -67,7 +70,7 @@ def train(
         eps_start: Starting value of epsilon, for epsilon-greedy action selection
         eps_end: Minimum value of epsilon
         eps_decay: Multiplicative factor (per episode) for decreasing epsilon
-        save_path: Path to save agent network
+        save_path: Path to save agent network. Setting to None disables saving
         image_path: Path to save performance plot
         device_type: Torch device to use
         binary_path: Path Unity environment binary/executable
@@ -93,7 +96,9 @@ def train(
         eps_end=eps_end,
         eps_decay=eps_decay,
     )
-    if save_path:
+    if save_path is not None:
+        if save_path == "":
+            save_path = f"data/{env.__class__.__name__}.pth"
         agent_io.save(dqn_agent, save_path)
     plot.performance(scores, save_file=image_path)
 
