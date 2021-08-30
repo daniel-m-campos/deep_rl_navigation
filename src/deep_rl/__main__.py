@@ -5,12 +5,18 @@ import torch
 
 from deep_rl import (
     agent,
+    agent_factory,
     environment,
     play as rl_play,
     train as rl_train,
     agent_io,
     plot,
 )
+
+ENV_AGENT_MAP = {
+    environment.Navigation: agent.DQNAgent,
+    environment.ContinuousControl: agent.DDPGAgent,
+}
 
 
 def play(
@@ -36,14 +42,13 @@ def play(
     agent.DEVICE = device
 
     env = environment.create(env_name, train_mode=False)
-    dqn_agent = agent.DQNAgent(
+    dqn_agent = agent_factory.create(
+        ENV_AGENT_MAP[env.__class__].__name__,
+        f"data/{env.__class__.__name__}.pth" if load_path is None else load_path,
         state_size=env.observation_space.shape[0],
         action_size=env.action_space.n,
         **agent_params,
     )
-    if load_path is None:
-        load_path = f"data/{env.__class__.__name__}.pth"
-    agent_io.load(dqn_agent, load_path)
     rl_play.play(dqn_agent, env, max_steps)
 
 
@@ -81,8 +86,8 @@ def train(
     agent.DEVICE = device
 
     env = environment.create(env_name, binary_path)
-    # TODO: Parameterize Agent
-    dqn_agent = agent.DQNAgent(
+    dqn_agent = agent_factory.create(
+        ENV_AGENT_MAP[env.__class__].__name__,
         state_size=env.observation_space.shape[0],
         action_size=env.action_space.n,
         **agent_params,
