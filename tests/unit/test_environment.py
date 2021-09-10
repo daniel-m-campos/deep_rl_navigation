@@ -4,7 +4,7 @@ from deep_rl import environment
 
 
 def test_create_raises_error():
-    with pytest.raises(NotImplementedError) as test:
+    with pytest.raises(NotImplementedError):
         env = environment.create("Doesnt exist")
 
 

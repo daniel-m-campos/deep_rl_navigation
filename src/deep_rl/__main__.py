@@ -1,4 +1,5 @@
 import math
+from pathlib import Path
 
 import fire
 import torch
@@ -42,14 +43,14 @@ def play(
     agent.DEVICE = device
 
     env = environment.create(env_name, train_mode=False)
-    dqn_agent = agent_factory.create(
+    new_agent = agent_factory.create(
         ENV_AGENT_MAP[env.__class__].__name__,
         f"data/{env.__class__.__name__}.pth" if load_path is None else load_path,
         state_size=env.observation_space.shape[0],
-        action_size=env.action_space.n,
+        action_size=env.action_space.shape[0],
         **agent_params,
     )
-    rl_play.play(dqn_agent, env, max_steps)
+    rl_play.play(new_agent, env, max_steps)
 
 
 def train(
@@ -60,7 +61,7 @@ def train(
     eps_end: float = 0.01,
     eps_decay: float = 0.995,
     save_path: str = "",
-    image_path: str = "img/performance.png",
+    image_path: str = "img",
     device_type: str = "cpu",
     binary_path: str = None,
     **agent_params,
@@ -86,14 +87,14 @@ def train(
     agent.DEVICE = device
 
     env = environment.create(env_name, binary_path)
-    dqn_agent = agent_factory.create(
+    new_agent = agent_factory.create(
         ENV_AGENT_MAP[env.__class__].__name__,
         state_size=env.observation_space.shape[0],
-        action_size=env.action_space.n,
+        action_size=env.action_space.shape[0],
         **agent_params,
     )
     scores = rl_train.train(
-        dqn_agent,
+        new_agent,
         env,
         n_episodes=n_episodes,
         max_steps=max_steps,
@@ -104,8 +105,12 @@ def train(
     if save_path is not None:
         if save_path == "":
             save_path = f"data/{env.__class__.__name__}.pth"
-        agent_io.save(dqn_agent, save_path)
-    plot.performance(scores, save_file=image_path)
+        agent_io.save(new_agent, save_path)
+    if image_path is not None:
+        plot.performance(
+            scores,
+            save_file=Path(image_path) / f"{env.__class__.__name__}_performance.png",
+        )
 
 
 fire.Fire()

@@ -60,7 +60,7 @@ class ReplayBuffer:
         e = self.experience(state, action, reward, next_state, done)
         self.memory.append(e)
 
-    def sample(self):
+    def sample(self, action_dtype=torch.long):
         """Randomly sample a batch of experiences from memory."""
         experiences = random.sample(self.memory, k=self.batch_size)
 
@@ -69,13 +69,9 @@ class ReplayBuffer:
             .float()
             .to(DEVICE)
         )
-        actions = (
-            torch.from_numpy(
-                np.vstack([e.action for e in experiences if e is not None])
-            )
-            .long()
-            .to(DEVICE)
-        )
+        actions = torch.from_numpy(
+            np.vstack([e.action for e in experiences if e is not None])
+        ).to(dtype=action_dtype, device=DEVICE)
         rewards = (
             torch.from_numpy(
                 np.vstack([e.reward for e in experiences if e is not None])
@@ -250,7 +246,7 @@ class DDPGAgent(Agent):
         self,
         state_size,
         action_size,
-        seed,
+        seed=0,
         buffer_size=int(1e5),
         batch_size=128,
         gamma=0.99,
@@ -301,10 +297,8 @@ class DDPGAgent(Agent):
         """
         # Save experience / reward
         self.memory.add(state, action, reward, next_state, done)
-
-        # Learn, if enough samples are available in memory
         if len(self.memory) > self.batch_size:
-            experiences = self.memory.sample()
+            experiences = self.memory.sample(action_dtype=torch.float32)
             self.learn(experiences, self.gamma)
 
     def act(self, state, add_noise=True):
@@ -316,6 +310,7 @@ class DDPGAgent(Agent):
         self.actor_local.train()
         if add_noise:
             action += self.noise.sample()
+        # FIXME: action range shouldn't be hard coded here
         return np.clip(action, -1, 1)
 
     def reset(self):
@@ -349,10 +344,10 @@ class DDPGAgent(Agent):
 
     def _update_critic(self, actions, dones, gamma, next_states, rewards, states):
         actions_next = self.actor_target(next_states)
-        Q_targets_next = self.critic_target(next_states, actions_next)
-        Q_targets = rewards + (gamma * Q_targets_next * (1 - dones))
-        Q_expected = self.critic_local(states, actions)
-        critic_loss = F.mse_loss(Q_expected, Q_targets)
+        q_targets_next = self.critic_target(next_states, actions_next)
+        q_targets = rewards + (gamma * q_targets_next * (1 - dones))
+        q_expected = self.critic_local(states, actions)
+        critic_loss = F.mse_loss(q_expected, q_targets)
         self.critic_optimizer.zero_grad()
         critic_loss.backward()
         self.critic_optimizer.step()
