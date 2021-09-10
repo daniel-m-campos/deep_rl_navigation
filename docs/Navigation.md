@@ -1,6 +1,6 @@
 # Navigation
 
-![](../img/play.gif)
+![](../img/navigation_play.gif)
 
 ## Game Environment
 
