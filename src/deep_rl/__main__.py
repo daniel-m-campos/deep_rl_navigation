@@ -60,7 +60,7 @@ def train(
     eps_start: float = 1.0,
     eps_end: float = 0.01,
     eps_decay: float = 0.995,
-    save_path: str = "",
+    save_path: str = "data",
     image_path: str = "img",
     device_type: str = "cpu",
     binary_path: str = None,
@@ -82,6 +82,20 @@ def train(
         binary_path: Path Unity environment binary/executable
         agent_params: Agent specific parameter overrides
     """
+
+    def filename(path, env):
+        name = env.__class__.__name__
+        if path != "data":
+            return path
+        elif isinstance(env, environment.Navigation):
+            return Path(path) / f"{name}.pth"
+        elif isinstance(env, environment.ContinuousControl):
+            actor_filename = Path(path) / f"{name}Actor.pth"
+            critic_filename = Path(path) / f"{name}Critic.pth"
+            return actor_filename, critic_filename
+        else:
+            raise NotImplementedError
+
     device = torch.device(device_type)
     print(f"Training the Agent with {device.type} device")
     agent.DEVICE = device
@@ -103,13 +117,12 @@ def train(
         eps_decay=eps_decay,
     )
     if save_path is not None:
-        if save_path == "":
-            save_path = f"data/{env.__class__.__name__}.pth"
-        agent_io.save(new_agent, save_path)
+        agent_io.save(new_agent, filename(save_path, env))
     if image_path is not None:
         plot.performance(
             scores,
-            save_file=Path(image_path) / f"{env.__class__.__name__}_performance.png",
+            save_file=Path(image_path)
+            / f"{env.__class__.__name__.lower()}_performance.png",
         )
 
 
