@@ -215,7 +215,7 @@ class DQNAgent(Agent):
 class OUNoise:
     """Ornstein-Uhlenbeck process."""
 
-    def __init__(self, size, seed, mu=0.0, theta=0.15, sigma=0.2):
+    def __init__(self, size, seed, mu=0.0, theta=0.15, sigma=0.1):
         """Initialize parameters and noise process."""
         self.mu = mu * np.ones(size)
         self.theta = theta
@@ -251,9 +251,10 @@ class DDPGAgent(Agent):
         batch_size=128,
         gamma=0.99,
         tau=1e-3,
-        actor_learning_rate=1e-4,
-        critic_learning_rate=1e-3,
+        actor_learning_rate=2e-4,
+        critic_learning_rate=2e-4,
         weight_decay=0,
+        update_lag=20,
     ):
         """Initialize an Agent object.
 
@@ -273,6 +274,8 @@ class DDPGAgent(Agent):
         self.action_size = action_size
         self.seed = seed
         random.seed(seed)
+        self.update_lag = update_lag
+        self.t_step = 0
 
         self.actor_local = Actor(state_size, action_size, seed).to(DEVICE)
         self.actor_target = Actor(state_size, action_size, seed).to(DEVICE)
@@ -297,9 +300,7 @@ class DDPGAgent(Agent):
         """
         # Save experience / reward
         self.memory.add(state, action, reward, next_state, done)
-        if len(self.memory) > self.batch_size:
-            experiences = self.memory.sample(action_dtype=torch.float32)
-            self.learn(experiences, self.gamma)
+        self._replay()
 
     def act(self, state, add_noise=True):
         """Returns actions for given state as per current policy."""
@@ -351,3 +352,10 @@ class DDPGAgent(Agent):
         self.critic_optimizer.zero_grad()
         critic_loss.backward()
         self.critic_optimizer.step()
+
+    def _replay(self):
+        self.t_step = (self.t_step + 1) % self.update_lag
+        if self.t_step == 0:
+            if len(self.memory) > self.batch_size:
+                experiences = self.memory.sample(action_dtype=torch.float32)
+                self.learn(experiences, self.gamma)
