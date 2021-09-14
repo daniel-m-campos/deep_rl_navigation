@@ -33,7 +33,7 @@ class QNetwork(nn.Module):
 def hidden_init(layer):
     fan_in = layer.weight.data.size()[0]
     lim = 1.0 / np.sqrt(fan_in)
-    return (-lim, lim)
+    return -lim, lim
 
 
 class Actor(nn.Module):
