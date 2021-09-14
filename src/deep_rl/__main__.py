@@ -19,6 +19,25 @@ ENV_AGENT_MAP = {
     environment.ContinuousControl: agent.DDPGAgent,
 }
 
+ENV_GOAL_MAP = {
+    environment.Navigation: 12,
+    environment.ContinuousControl: 30,
+}
+
+
+def _filename(path, env):
+    name = env.__class__.__name__
+    if path != "data":
+        return path
+    elif isinstance(env, environment.Navigation):
+        return Path(path) / f"{name}.pth"
+    elif isinstance(env, environment.ContinuousControl):
+        actor_filename = Path(path) / f"{name}Actor.pth"
+        critic_filename = Path(path) / f"{name}Critic.pth"
+        return actor_filename, critic_filename
+    else:
+        raise NotImplementedError
+
 
 def play(
     env_name: str,
@@ -45,7 +64,7 @@ def play(
     env = environment.create(env_name, train_mode=False)
     new_agent = agent_factory.create(
         ENV_AGENT_MAP[env.__class__].__name__,
-        f"data/{env.__class__.__name__}.pth" if load_path is None else load_path,
+        _filename("data" if load_path is None else load_path, env),
         state_size=env.observation_space.shape[0],
         action_size=env.action_space.shape[0],
         **agent_params,
@@ -83,19 +102,6 @@ def train(
         agent_params: Agent specific parameter overrides
     """
 
-    def filename(path, env):
-        name = env.__class__.__name__
-        if path != "data":
-            return path
-        elif isinstance(env, environment.Navigation):
-            return Path(path) / f"{name}.pth"
-        elif isinstance(env, environment.ContinuousControl):
-            actor_filename = Path(path) / f"{name}Actor.pth"
-            critic_filename = Path(path) / f"{name}Critic.pth"
-            return actor_filename, critic_filename
-        else:
-            raise NotImplementedError
-
     device = torch.device(device_type)
     print(f"Training the Agent with {device.type} device")
     agent.DEVICE = device
@@ -117,12 +123,13 @@ def train(
         eps_decay=eps_decay,
     )
     if save_path is not None:
-        agent_io.save(new_agent, filename(save_path, env))
+        agent_io.save(new_agent, _filename(save_path, env))
     if image_path is not None:
         plot.performance(
             scores,
             save_file=Path(image_path)
             / f"{env.__class__.__name__.lower()}_performance.png",
+            goal=ENV_GOAL_MAP[env.__class__],
         )
 
 
