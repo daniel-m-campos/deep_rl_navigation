@@ -1,6 +1,6 @@
 # Continuous Control
 
-![](../img/play_reacher.gif)
+![](../img/continuouscontrol_play.gif)
 
 ## Game Environment
 
