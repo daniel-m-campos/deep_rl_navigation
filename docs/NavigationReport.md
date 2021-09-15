@@ -42,7 +42,7 @@ The Neural Network architecture used was:
 
 The agent achieved an average score of 13 at episode 494.
 
-![](img/performance.png)
+![](../img/navigation_performance.png)
 
 ## Ideas for Future Work
 
