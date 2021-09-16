@@ -50,7 +50,7 @@ The Critic neural network architecture used was:
 
 ## Performance
 
-The agent first achieved a score over 30 at episode 386 and then 100 episode average greater than 30 at episode 600.
+The agent first achieved a score over 30 at episode 386 and then 100 episode average greater than 30 at episode 700.
 
 ### Plot of Rewards
 
@@ -60,16 +60,16 @@ The agent first achieved a score over 30 at episode 386 and then 100 episode ave
 
 | Episode | Average Score |
 | :---: | :---:    |
-|100  | 0.50   |
-|200  | 0.63   |
-|300  | 2.39   |
-|400  | 7.58   |
-|500  | 24.81  |
-|600  | 32.61  |
-|700  | 36.07  |
-|800  | 37.56  |
-|900  | 36.47  |
-|1000 | 37.89  |
+|100  | 0.71   |
+|200  | 1.96   |
+|300  | 3.69   |
+|400  | 9.82   |
+|500  | 17.98  |
+|600  | 25.63  |
+|700  | 33.70  |
+|800  | 36.43  |
+|900  | 38.04  |
+|1000 | 38.76  |
 
 ## Ideas for Future Work
 
