@@ -66,7 +66,9 @@ python -m deep_rl train navigation \
 
 ### Play
 
-To play an agent in the Banana Unity environment with default parameters, run:
+#### Navigation
+
+To play an agent in the Navigation/Banana environment with default parameters, run:
 
 ```bash
 cd deep_rl
@@ -78,4 +80,14 @@ To play with alternative network, run
 
 ```bash
 python -m deep_rl play navigation --load_path="path_to_your/network.pth"
+```
+
+#### Continuous Control
+
+To play an agent in the Continuous Control/Reacher environment with default parameters, run:
+
+```bash
+cd deep_rl
+. venv/bin/activate
+python -m deep_rl play continuous_control
 ```
