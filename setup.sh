@@ -13,7 +13,7 @@ BINARY_DOWNLOAD=(
 function cecho() {
   local color=$1
   local exp=$2
-  if ! [[ $color =~ '^[0-9]$' ]]; then
+  if ! [[ $color =~ ^[0-9]$ ]]; then
     case $(echo "$color" | tr '[:upper:]' '[:lower:]') in
     black | bk) color=0 ;;
     red | r) color=1 ;;
