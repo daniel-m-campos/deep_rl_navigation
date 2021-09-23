@@ -12,6 +12,13 @@ def test_load_dqn_agent():
 
 
 def test_load_ddpg_agent():
-    agent = DDPGAgent(state_size=3, action_size=1, seed=2)
+    agent = DDPGAgent(
+        state_size=3,
+        action_size=1,
+        seed=2,
+        fc1_units=400,
+        fc2_units=300,
+        use_batch_norm=False,
+    )
     filenames = (RESOURCE_DIR / "actor.pth", RESOURCE_DIR / "critic.pth")
     agent_io.load(agent, filenames)

@@ -221,7 +221,7 @@ class OUNoise:
         self.theta = theta
         self.sigma = sigma
         self.seed = seed
-        random.seed(seed)
+        np.random.seed(seed)
         self.state = None
         self.reset()
 
@@ -255,15 +255,10 @@ class DDPGAgent(Agent):
         critic_learning_rate=2e-4,
         weight_decay=0,
         update_lag=20,
+        fc1_units=128,
+        fc2_units=128,
+        use_batch_norm=True,
     ):
-        """Initialize an Agent object.
-
-        Params
-        ======
-            state_size (int): dimension of each state
-            action_size (int): dimension of each action
-            random_seed (int): random seed
-        """
         self.buffer_size = buffer_size
         self.batch_size = batch_size
         self.gamma = gamma
@@ -277,14 +272,22 @@ class DDPGAgent(Agent):
         self.update_lag = update_lag
         self.t_step = 0
 
-        self.actor_local = Actor(state_size, action_size, seed).to(DEVICE)
-        self.actor_target = Actor(state_size, action_size, seed).to(DEVICE)
+        self.actor_local = Actor(
+            state_size, action_size, seed, fc1_units, fc2_units, use_batch_norm
+        ).to(DEVICE)
+        self.actor_target = Actor(
+            state_size, action_size, seed, fc1_units, fc2_units, use_batch_norm
+        ).to(DEVICE)
         self.actor_optimizer = optim.Adam(
             self.actor_local.parameters(), lr=actor_learning_rate
         )
 
-        self.critic_local = Critic(state_size, action_size, seed).to(DEVICE)
-        self.critic_target = Critic(state_size, action_size, seed).to(DEVICE)
+        self.critic_local = Critic(
+            state_size, action_size, seed, fc1_units, fc2_units, use_batch_norm
+        ).to(DEVICE)
+        self.critic_target = Critic(
+            state_size, action_size, seed, fc1_units, fc2_units, use_batch_norm
+        ).to(DEVICE)
         self.critic_optimizer = optim.Adam(
             self.critic_local.parameters(),
             lr=critic_learning_rate,
