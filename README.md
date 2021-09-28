@@ -4,6 +4,7 @@
 
 1. [Navigation](docs/Navigation.md)
 2. [Continuous Control](docs/ContinuousControl.md)
+3. [Tennis](docs/Tennis.md)
 
 ## Installation
 
