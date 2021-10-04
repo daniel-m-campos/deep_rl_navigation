@@ -179,6 +179,8 @@ def create(env_name: str, binary_path: str = None, **kwargs) -> Environment:
         env = Navigation
     elif env_name in ContinuousControl.__name__:
         env = ContinuousControl
+    elif env_name in Tennis.__name__:
+        env = Tennis
     else:
         raise NotImplementedError(f"{env_name} not supported")
 
