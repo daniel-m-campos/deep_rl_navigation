@@ -1,5 +1,5 @@
 import abc
-from typing import Tuple, Dict, Union, List
+from typing import Tuple, Dict, Union, List, Any
 
 import gym
 import numpy as np
@@ -146,18 +146,18 @@ class Tennis(Environment):
             dtype=np.float32,
         )
 
-    def step(self, action) -> Tuple[np.array, float, bool, Dict]:
+    def step(self, action) -> Tuple[np.array, Any, Any, Dict]:
         self._info = self._unity_env.step(action)[self._brain_name]
         return (
-            self._info.vector_observations[0],
-            self._info.rewards[0],
-            self._info.local_done[0],
+            self._info.vector_observations,
+            self._info.rewards,
+            self._info.local_done,
             {},
         )
 
     def reset(self) -> np.array:
         self._info = self._unity_env.reset(train_mode=self.train_mode)[self._brain_name]
-        return self._info.vector_observations[0]
+        return self._info.vector_observations
 
     @property
     def action_space(self) -> gym.spaces.Box:
