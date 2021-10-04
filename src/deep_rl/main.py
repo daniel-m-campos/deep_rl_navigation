@@ -1,5 +1,6 @@
 import math
 from pathlib import Path
+from typing import Union
 
 import torch
 
@@ -47,7 +48,7 @@ def _action_size(env):
 def play(
     env_name: str,
     max_steps: int = math.inf,
-    load_path: str = None,
+    load_path: Union[str, Path] = None,
     device_type: str = "cpu",
     **agent_params,
 ):
