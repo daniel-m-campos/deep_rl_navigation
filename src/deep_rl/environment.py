@@ -1,5 +1,5 @@
 import abc
-from typing import Tuple, Dict
+from typing import Tuple, Dict, Union, List
 
 import gym
 import numpy as np
@@ -8,7 +8,9 @@ from unityagents import UnityEnvironment
 
 class Environment(abc.ABC):
     @abc.abstractmethod
-    def step(self, action) -> Tuple[np.array, float, bool, Dict]:
+    def step(
+        self, action
+    ) -> Tuple[np.array, Union[float, List[float]], Union[bool, List[bool]], Dict]:
         pass
 
     @abc.abstractmethod
