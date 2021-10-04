@@ -15,6 +15,7 @@ def train(
     eps_start=1.0,
     eps_end=0.01,
     eps_decay=0.995,
+    max_score=True,
 ) -> List[float]:
     """Episodic Reinforcement Learning
 
@@ -28,6 +29,7 @@ def train(
         eps_end (float): minimum value of epsilon
         eps_decay (float): multiplicative factor (per episode) for decreasing epsilon
         filename (str): Optional path to save agent network
+        max_score (bool): Optional use max score if reward is vector
     """
     scores = []
     scores_window = deque(maxlen=100)
@@ -40,8 +42,8 @@ def train(
             next_state, reward, done, _ = environment.step(action)
             agent.step(state, action, reward, next_state, done)
             state = next_state
-            score += reward
-            if done:
+            score += reward if len(reward) == 1 else reward.max()
+            if any(done):
                 break
         scores_window.append(score)
         scores.append(score)
