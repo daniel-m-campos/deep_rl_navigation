@@ -68,7 +68,7 @@ function set_binary_link() {
     cecho g "Found @ $BINARY_LOCATION"
   fi
   cecho g "Symlinking to $SYMLINK_PATH/$BINARY_NAME"
-  ln -s $(realpath $BINARY_LOCATION) "$SYMLINK_PATH/$BINARY_NAME"
+  ln -s "$(realpath "$BINARY_LOCATION")" "$SYMLINK_PATH/$BINARY_NAME"
 }
 
 function set_all_binaries() {
