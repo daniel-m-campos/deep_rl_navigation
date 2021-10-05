@@ -3,7 +3,7 @@
 ## Learning Algorithm
 
 The learning algorithm used was Multi-Agent Deep Deterministic Policy Gradient (MADDPG). The algorithm uses are shared
-replay buffer and critic networks between actors. An individual DDPG actor network is used per agent.
+replay buffer and critic networks between agents. An individual DDPG actor network is used per agent.
 
 ### Hyper-parameters
 
