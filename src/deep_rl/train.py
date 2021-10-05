@@ -5,6 +5,7 @@ import numpy as np
 
 from deep_rl.agent import Agent
 from deep_rl.environment import Environment
+from deep_rl.util import aggregate, is_done
 
 
 def train(
@@ -15,7 +16,6 @@ def train(
     eps_start=1.0,
     eps_end=0.01,
     eps_decay=0.995,
-    max_score=True,
 ) -> List[float]:
     """Episodic Reinforcement Learning
 
@@ -42,8 +42,8 @@ def train(
             next_state, reward, done, _ = environment.step(action)
             agent.step(state, action, reward, next_state, done)
             state = next_state
-            score += reward if len(reward) == 1 else reward.max()
-            if any(done):
+            score += aggregate(reward)
+            if is_done(done):
                 break
         scores_window.append(score)
         scores.append(score)
