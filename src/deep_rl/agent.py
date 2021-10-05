@@ -2,6 +2,7 @@ import abc
 import copy
 import random
 from collections import namedtuple, deque
+from typing import Union
 
 import numpy as np
 import torch
@@ -109,11 +110,7 @@ class Agent(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def act(self, state, eps=0.0) -> int:
-        pass
-
-    @abc.abstractmethod
-    def learn(self, experiences, gamma) -> None:
+    def act(self, state, eps=0.0) -> Union[int, np.array]:
         pass
 
 
@@ -165,7 +162,7 @@ class DQNAgent(Agent):
         if self.t_step == 0:
             if len(self.memory) > self.batch_size:
                 experiences = self.memory.sample()
-                self.learn(experiences, self.gamma)
+                self._learn(experiences, self.gamma)
 
     def act(self, state, eps=0.0):
         """Returns actions for given state as per current policy.
@@ -186,7 +183,7 @@ class DQNAgent(Agent):
         else:
             return random.choice(np.arange(self.action_size))
 
-    def learn(self, experiences, gamma):
+    def _learn(self, experiences, gamma):
         """Update value parameters using given batch of experience tuples.
 
         Params
@@ -258,6 +255,7 @@ class DDPGAgent(Agent):
         fc1_units=128,
         fc2_units=128,
         use_batch_norm=True,
+        replay_buffer: ReplayBuffer = None,
     ):
         self.buffer_size = buffer_size
         self.batch_size = batch_size
@@ -295,7 +293,10 @@ class DDPGAgent(Agent):
         )
 
         self.noise = OUNoise(action_size, seed)
-        self.memory = ReplayBuffer(action_size, buffer_size, batch_size, seed)
+        if replay_buffer is None:
+            self.memory = ReplayBuffer(action_size, buffer_size, batch_size, seed)
+        else:
+            self.memory = replay_buffer
 
     def step(self, state, action, reward, next_state, done):
         """
@@ -320,7 +321,7 @@ class DDPGAgent(Agent):
     def reset(self):
         self.noise.reset()
 
-    def learn(self, experiences, gamma):
+    def _learn(self, experiences, gamma):
         """Update policy and value parameters using given batch of experience tuples.
         Q_targets = r + γ * critic_target(next_state, actor_target(next_state))
         where:
@@ -358,7 +359,79 @@ class DDPGAgent(Agent):
 
     def _replay(self):
         self.t_step = (self.t_step + 1) % self.update_lag
-        if self.t_step == 0:
-            if len(self.memory) > self.batch_size:
-                experiences = self.memory.sample(action_dtype=torch.float32)
-                self.learn(experiences, self.gamma)
+        if len(self.memory) > self.batch_size and self.t_step == 0:
+            experiences = self.memory.sample(action_dtype=torch.float32)
+            self._learn(experiences, self.gamma)
+
+
+class MADDPGAgent(Agent):
+    """Multiple Agent DDPG"""
+
+    def __init__(
+        self,
+        num_agents,
+        state_size,
+        action_size,
+        seed=0,
+        buffer_size=int(1e5),
+        batch_size=256,
+        gamma=0.99,
+        tau=1e-3,
+        actor_learning_rate=2e-4,
+        critic_learning_rate=2e-4,
+        weight_decay=0,
+        update_lag=20,
+        fc1_units=128,
+        fc2_units=128,
+        use_batch_norm=True,
+    ):
+        self.num_agents = num_agents
+        self.buffer_size = buffer_size
+        self.batch_size = batch_size
+        self.gamma = gamma
+        self.tau = tau
+        random.seed(seed)
+
+        self.memory = ReplayBuffer(action_size, buffer_size, batch_size, seed)
+        self.agents = [
+            DDPGAgent(
+                state_size,
+                action_size,
+                seed + i,
+                buffer_size,
+                batch_size,
+                gamma,
+                tau,
+                actor_learning_rate,
+                critic_learning_rate,
+                weight_decay,
+                update_lag,
+                fc1_units,
+                fc2_units,
+                use_batch_norm,
+                self.memory,
+            )
+            for i in range(num_agents)
+        ]
+        self._sync_critics()
+
+    def _sync_critics(self):
+        self.critic_local = self.agents[0].critic_local
+        self.critic_target = self.agents[0].critic_target
+        self.critic_optimizer = self.agents[0].critic_optimizer
+        for agent in self.agents[1:]:
+            agent.critic_local = self.critic_local
+            agent.critic_target = self.critic_target
+            agent.critic_optimizer = self.critic_optimizer
+
+    def step(self, states, actions, rewards, next_states, dones):
+        for agent, state, action, reward, next_state, done in zip(
+            self.agents, states, actions, rewards, next_states, dones
+        ):
+            agent.step(state, action, reward, next_state, done)
+
+    def act(self, states, add_noise=True) -> Union[int, np.array]:
+        actions = np.vstack(
+            agent.act(state, add_noise) for agent, state in zip(self.agents, states)
+        )
+        return actions

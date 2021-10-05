@@ -14,6 +14,8 @@ def create(
         new_agent = agent.DQNAgent(**agent_params)
     elif agent_name in agent.DDPGAgent.__name__:
         new_agent = agent.DDPGAgent(**agent_params)
+    elif agent_name in agent.MADDPGAgent.__name__:
+        new_agent = agent.MADDPGAgent(num_agents=2, **agent_params)
     else:
         raise NotImplementedError(f"{agent_name} not supported")
     if filename:
