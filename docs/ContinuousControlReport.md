@@ -45,7 +45,7 @@ The Critic neural network architecture used was:
 1. 33 input state vector
 2. 128 fully connected ReLU
 2. Batch normalization layer
-2. 128+4=32 fully connected ReLU
+2. 128+4=132 fully connected ReLU
 4. 1 linear output action value
 
 ## Performance
