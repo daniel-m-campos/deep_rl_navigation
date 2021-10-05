@@ -6,9 +6,9 @@ REPO=https://github.com/daniel-m-campos/deep_rl.git
 SYMLINK_PATH=/usr/local/sbin
 declare -A BINARY_DOWNLOAD
 BINARY_DOWNLOAD=(
-  [Banana.x86_64]=https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Linux.zip
-  [Reacher.x86_64]=https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Linux.zip
-  [Tennis.x86_64]=https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Linux.zip
+    [Banana.x86_64]=https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Linux.zip
+    [Reacher.x86_64]=https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Linux.zip
+    [Tennis.x86_64]=https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Linux.zip
 )
 
 function cecho() {
