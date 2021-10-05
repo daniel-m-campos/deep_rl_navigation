@@ -1,6 +1,6 @@
 import math
 from pathlib import Path
-from typing import Union
+from typing import Union, Optional, Tuple
 
 import torch
 
@@ -48,7 +48,7 @@ def _action_size(env):
 def play(
     env_name: str,
     max_steps: int = math.inf,
-    load_path: Union[str, Path] = None,
+    load_path: Union[Tuple[str, Optional[str]], Tuple[Path, Optional[Path]]] = None,
     device_type: str = "cpu",
     **agent_params,
 ):
@@ -85,7 +85,7 @@ def train(
     eps_start: float = 1.0,
     eps_end: float = 0.01,
     eps_decay: float = 0.995,
-    save_path: str = "data",
+    save_path: Union[Tuple[str, Optional[str]], Tuple[Path, Optional[Path]]] = "data",
     image_path: str = "img",
     device_type: str = "cpu",
     binary_path: str = None,
