@@ -11,7 +11,7 @@ replay buffer and critic networks between actors. An individual DDPG actor netwo
 
 | Name           | Value    | 
 | ---            | ---      |
-| episodes       | 20,000   |
+| episodes       | 15,000   |
 | max time steps | 1000     |
 | epsilon start  | 1.0      |
 | epsilon end    | 0.01     |
