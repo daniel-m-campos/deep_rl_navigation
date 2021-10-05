@@ -92,3 +92,13 @@ cd deep_rl
 . venv/bin/activate
 python -m deep_rl play continuous_control
 ```
+
+#### Tennis
+
+To play an agent in the Tennis environment with default parameters, run:
+
+```bash
+cd deep_rl
+. venv/bin/activate
+python -m deep_rl play tennis
+```
