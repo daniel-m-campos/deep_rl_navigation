@@ -29,7 +29,7 @@ links.
 
 The default binary paths are set in the `Environment` implementations and are of the
 form `/usr/local/sbin/<ENVIRONMENT>.x86_64`. See the `Navigation` class in `environment.py` for an example. You can
-either sim link the downloaded binaries to the default directories or pass the `binary_path` when running the package.
+either symlink the downloaded binaries to the default directories or pass the `binary_path` when running the package.
 
 ## Usage
 
